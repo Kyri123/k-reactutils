@@ -11,9 +11,9 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        run: npm ci
+        run: yarn install
       - name: Create App as test
-        run: npm run build --if-present
+        run: yarn build
 
   publish-npm:
     needs: build
@@ -25,7 +25,7 @@ jobs:
           node-version: 18
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
-        run: npm ci
+        run: yarn install
       - name: Release on NPM
         run: npm publish
         env:
