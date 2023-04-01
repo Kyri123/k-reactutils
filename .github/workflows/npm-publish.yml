@@ -32,7 +32,7 @@ jobs:
         id: extract_version
         uses: Saionaro/extract-package-version@v1.2.1
       - name: Set version
-        run: npm version ${{ steps.extract_version.outputs.version }}-build.${{github.run_number}}
+        run: npm version ${{ steps.extract_version.outputs.version }}-build.${{github.run_number}} --no-git-tag-version
       - name: Release on NPM
         run: npm publish
         env:
