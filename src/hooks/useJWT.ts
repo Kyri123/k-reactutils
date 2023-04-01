@@ -2,27 +2,16 @@ import useLocalStorage from "./useLocalStorage";
 import {
 	useEffect,
 	useState
-} from "react";
-import jwt_decode from "jwt-decode";
+}                                 from "react";
+import jwt_decode, { JwtPayload } from "jwt-decode";
 
-export interface JwtSession {
-	[key: string]: any;
-	iss?: string | undefined;
-	sub?: string | undefined;
-	aud?: string | string[] | undefined;
-	exp?: number | undefined;
-	nbf?: number | undefined;
-	iat?: number | undefined;
-	jti?: string | undefined;
-}
-
-export default function useJWT<T = any & JwtSession>( StorageKey: string ) {
+export default function useJWT<T = any & JwtPayload>( StorageKey: string ) {
 	const { Storage, SetStorage, ResetStorage } = useLocalStorage<string>( StorageKey, "" );
-	const [ Session, setSession ] = useState< T & JwtSession | undefined >( undefined );
+	const [ Session, setSession ] = useState< T & JwtPayload | undefined >( undefined );
 
 	useEffect( () => {
 		try {
-			const Decode: T & JwtSession = jwt_decode( Storage.split( Storage )[ 1 ] );
+			const Decode: T & JwtPayload = jwt_decode( Storage.split( Storage )[ 1 ] );
 			setSession( current => Decode );
 			return;
 		}

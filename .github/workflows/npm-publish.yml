@@ -26,6 +26,11 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: yarn install
+      - name: Extract version
+        id: extract_version
+        uses: Saionaro/extract-package-version@v1.2.1
+      - name: Set version
+        run: npm version ${{ steps.extract_version.outputs.version }}-build.${{github.run_number}}
       - name: Release on NPM
         run: npm publish
         env:
