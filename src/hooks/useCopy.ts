@@ -1,10 +1,11 @@
 import {
 	useEffect,
 	useState
-}                      from "react";
-import copytoclipboard from "copy-to-clipboard";
+}                       from "react";
+import copytoclipboard  from "copy-to-clipboard";
+import { clearTimeout } from "timers";
 
-export function useCopy<T extends any = any>( InitRef: T | undefined = undefined ) : [
+export function useCopy<T extends any = any>( InitRef?: T, AutoReset: number | undefined = 2500 ) : [
 	( CopyString: string, Ref?: T ) => void,
 	( Ref?: T ) => boolean,
 		T | undefined,
@@ -12,18 +13,6 @@ export function useCopy<T extends any = any>( InitRef: T | undefined = undefined
 ] {
 	const [ Copy, setCopy ] = useState("");
 	const [ CurrentCopyRef, setRef ] = useState< T | undefined >( InitRef );
-
-	useEffect( () => {
-		if( Copy !== "" ) {
-			copytoclipboard( Copy );
-		}
-		let Timeout = setTimeout( ClearCopy, 2000 );
-		return () => {
-			if( Timeout ) {
-				clearTimeout( Timeout );
-			}
-		}
-	}, [ Copy ] )
 
 	const ClearCopy = () => {
 		setCopy( "" );
@@ -33,6 +22,19 @@ export function useCopy<T extends any = any>( InitRef: T | undefined = undefined
 		setCopy( CopyString );
 		setRef( Ref );
 	}
+
+	useEffect( () => {
+		let Timeout: NodeJS.Timeout | null = null;
+		if( IsCopied() && AutoReset && AutoReset > 0 ) {
+			Timeout = setTimeout( ClearCopy, AutoReset );
+		}
+
+		return () => {
+			if( Timeout ) {
+				clearTimeout( Timeout );
+			}
+		}
+	}, [ Copy ] )
 
 	const IsCopied = (Ref?: T) => {
 		if( Ref ) {

@@ -1,6 +1,6 @@
-import { useState }         from "react";
+import { useToggle } from "./useToggle";
 
 export default function useUpdate() {
-	const [ undefined, setDummy ] = useState( false );
-	return () => setDummy( Current => !Current );
+	const [ undefined, Toggle ] = useToggle( false );
+	return Toggle;
 }
