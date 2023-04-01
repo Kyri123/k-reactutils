@@ -1,8 +1,6 @@
 import {
-	useEffect,
 	useState
 }                      from "react";
-import copytoclipboard from "copy-to-clipboard";
 
 /**
  * Toggle hook to toggle a boolean.

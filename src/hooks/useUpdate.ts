@@ -1,6 +1,6 @@
 import { useToggle } from "./useToggle";
 
-export default function useUpdate() {
-	const [ undefined, Toggle ] = useToggle( false );
-	return Toggle;
+export function useUpdate() {
+	const Toggle = useToggle( false );
+	return Toggle[ 1 ];
 }

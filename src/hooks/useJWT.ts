@@ -1,18 +1,18 @@
-import useLocalStorage from "./useLocalStorage";
+import { useLocalStorage } from "./useLocalStorage";
 import {
 	useEffect,
 	useState
 }                                 from "react";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 
-export default function useJWT<T = any & JwtPayload>( StorageKey: string ) {
+export function useJWT<T = any & JwtPayload>( StorageKey: string ) {
 	const { Storage, SetStorage, ResetStorage } = useLocalStorage<string>( StorageKey, "" );
 	const [ Session, setSession ] = useState< T & JwtPayload | undefined >( undefined );
 
 	useEffect( () => {
 		try {
 			const Decode: T & JwtPayload = jwt_decode( Storage.split( Storage )[ 1 ] );
-			setSession( current => Decode );
+			setSession( () => Decode );
 			return;
 		}
 		catch( e ) { console.warn( e ) }

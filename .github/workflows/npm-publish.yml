@@ -13,7 +13,7 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: yarn install
-      - name: Create App as test
+      - name: Build cjs
         run: yarn build
 
   publish-npm:
@@ -28,6 +28,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install dependencies
         run: yarn install
+      - name: Build cjs
+        run: yarn build
       - name: Extract version
         id: extract_version
         uses: Saionaro/extract-package-version@v1.2.1

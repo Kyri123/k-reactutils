@@ -12,7 +12,7 @@ export interface IUseLocalStorage<T> {
 	ResetStorage: () => void
 }
 
-export default function useLocalStorage<T = any>( Key : string, InitValue : T ): IUseLocalStorage<T> {
+export function useLocalStorage<T = any>( Key : string, InitValue : T ): IUseLocalStorage<T> {
 	const [ Storage, setStorage ] = useState( () => {
 		const LocalStorageValue = window.localStorage.getItem( Key );
 
@@ -39,7 +39,7 @@ export default function useLocalStorage<T = any>( Key : string, InitValue : T ):
 		const Event = (e: StorageEvent) => {
 			if( e.newValue !== Storage && e.key === Key ) {
 				if( typeof InitValue === "object" && e.newValue ) {
-					setStorage( (Current: T) => JSON.parse( e.newValue! ) );
+					setStorage( () => JSON.parse( e.newValue! ) );
 					return;
 				}
 				setStorage( e.newValue );

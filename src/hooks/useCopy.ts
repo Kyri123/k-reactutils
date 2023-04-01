@@ -2,8 +2,6 @@ import {
 	useEffect,
 	useState
 }                       from "react";
-import copytoclipboard  from "copy-to-clipboard";
-import { clearTimeout } from "timers";
 
 export function useCopy<T extends any = any>( InitRef?: T, AutoReset: number | undefined = 2500 ) : [
 	( CopyString: string, Ref?: T ) => void,

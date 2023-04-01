@@ -1,18 +1,5 @@
-import React 			from 'react';
-import ReactDOM         from 'react-dom/client';
-
-const root = ReactDOM.createRoot(
-	document.getElementById('root') as HTMLElement
-);
-
-const TestApp : React.FunctionComponent = () => {
-	return (
-		<>
-		</>
-	);
-};
-
-
-root.render(
-	<TestApp />
-);
+export { useLocalStorage } from "./hooks/useLocalStorage";
+export { useUpdate } from "./hooks/useUpdate";
+export { useJWT } from "./hooks/useJWT";
+export { useCopy } from "./hooks/useCopy";
+export { useToggle } from "./hooks/useToggle";
