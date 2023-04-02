@@ -4,7 +4,7 @@ import {
 	useState
 } from "react";
 
-export function useFetchJson( Url: string, Options? : RequestInit ) {
+export function useFetchText( Url: string, Options? : RequestInit ) {
 	const [ IsLoading, setIsLoading ] = useState( () => true );
 	const [ Result, setResult ] = useState< string >( () => "" );
 	const [ Success, setSuccess ] = useState( () => false );
