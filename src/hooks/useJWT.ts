@@ -23,6 +23,23 @@ export function useJWT<T = any & JwtPayload>( StorageKey: string ) {
 		return SecondsLeft() > 0;
 	}
 
+	const GetRaw = (): T | undefined => {
+		if( !Session )
+			return Session;
+
+		let RawSession = { ...Session };
+
+		delete RawSession.exp;
+		delete RawSession.aud;
+		delete RawSession.iat;
+		delete RawSession.iss;
+		delete RawSession.nbf;
+		delete RawSession.jti;
+		delete RawSession.sub;
+
+		return RawSession;
+	}
+
 	const SecondsLeft = () => {
 		return Math.max( ( Session?.exp || 0 ) - Math.trunc( Date.now() / 1000 ), 0 );
 	}
@@ -33,6 +50,7 @@ export function useJWT<T = any & JwtPayload>( StorageKey: string ) {
 		SecondsLeft,
 		SessionActive,
 		Session,
-		ClearSession: ResetStorage
+		ClearSession: ResetStorage,
+		GetRawSession: GetRaw
 	}
 }

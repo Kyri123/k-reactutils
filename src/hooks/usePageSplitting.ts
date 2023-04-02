@@ -11,15 +11,19 @@ export function usePageSplitting< T extends any >( Array: T[], NumPerPage: numbe
 		setCurrentPageArray( () => [ ...Array ].splice( SelectPage * NumPerPage, NumPerPage ) );
 	}, [ Array ] )
 
-	const SetPage = ( Page: number ) => {
-		const RealPage = Math.min(Math.max(Page, 0), Math.ceil( Array.length / NumPerPage ))
+	const GetMaxPage = () => {
+		return Math.ceil( Array.length / NumPerPage );
+	}
+
+	const SetPage = ( Page: number = 0 ) => {
+		const RealPage = Math.min(Math.max(Page, 0), GetMaxPage())
 		if( RealPage !== SelectPage ) {
 			setSelectedPage( RealPage );
 			setCurrentPageArray( [ ...Array ].splice( RealPage * NumPerPage, NumPerPage ) )
 		}
 	}
 
-	const NextPage = ( Page: -1 | 1 ) => {
+	const NextPage = ( Page: -1 | 1 = 1 ) => {
 		SetPage( SelectPage + Page );
 	}
 
@@ -27,6 +31,7 @@ export function usePageSplitting< T extends any >( Array: T[], NumPerPage: numbe
 		CurrentPageArray,
 		SelectPage,
 		SetPage,
-		NextPage
+		NextPage,
+		GetMaxPage
 	}
 }

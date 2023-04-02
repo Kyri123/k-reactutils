@@ -4,3 +4,6 @@ export { useJWT } from "./hooks/useJWT";
 export { useCopy } from "./hooks/useCopy";
 export { useToggle } from "./hooks/useToggle";
 export { usePageSplitting } from "./hooks/usePageSplitting";
+export { useFetchJson } from "./hooks/useFetchJson";
+export { useFetchText } from "./hooks/useFetchText";
+export { usePageTitle } from "./hooks/usePageTitle";
