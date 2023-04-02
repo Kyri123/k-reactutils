@@ -1,4 +1,4 @@
-name: Node.js Package
+name: Node.js Alpha-Package
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
         id: extract_version
         uses: Saionaro/extract-package-version@v1.2.1
       - name: Set version
-        run: npm version ${{ steps.extract_version.outputs.version }} --no-git-tag-version -i prerelease --preid alpha
+        run: npm version prerelease --no-git-tag-version --preid alpha
       - name: Release on NPM
         run: npm publish
         env:
