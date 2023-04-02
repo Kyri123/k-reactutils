@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-export function usePageTitle( InitTitle?: string ) {
+export function usePageTitle( InitTitle?: string ): ( NewTitle: string ) => void {
 	const Title = useRef( InitTitle || document.title );
 
 	if( Title.current ) {
