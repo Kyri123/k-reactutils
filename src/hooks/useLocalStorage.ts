@@ -1,5 +1,6 @@
 import {
 	useEffect,
+	useRef,
 	useState
 } from "react";
 
@@ -13,13 +14,15 @@ export interface IUseLocalStorage<T> {
 }
 
 export function useLocalStorage<T = any>( Key : string, InitValue : T ): IUseLocalStorage<T> {
-	const [ Storage, setStorage ] = useState( () => {
+	const InitRef = useRef<T>( InitValue );
+
+	const DoInitStorage = ( ) => {
 		const LocalStorageValue = window.localStorage.getItem( Key );
 
 		if( LocalStorageValue ) {
-			if( typeof InitValue === "object" ) {
+			if( typeof InitRef.current === "object" ) {
 				const Storage = {
-					...InitValue,
+					...InitRef.current,
 					...JSON.parse( LocalStorageValue )
 				}
 
@@ -30,15 +33,17 @@ export function useLocalStorage<T = any>( Key : string, InitValue : T ): IUseLoc
 			return LocalStorageValue;
 		}
 
-		window.localStorage.setItem( Key, JSON.stringify( InitValue ) );
-		return InitValue;
-	} );
+		window.localStorage.setItem( Key, JSON.stringify( InitRef.current ) );
+		return InitRef.current;
+	}
+
+	const [ Storage, setStorage ] = useState( DoInitStorage );
 
 	// update if storage was updated
 	useEffect( () => {
 		const Event = (e: StorageEvent) => {
 			if( e.newValue !== Storage && e.key === Key ) {
-				if( typeof InitValue === "object" && e.newValue ) {
+				if( typeof InitRef.current === "object" && e.newValue ) {
 					setStorage( () => JSON.parse( e.newValue! ) );
 					return;
 				}
@@ -54,13 +59,21 @@ export function useLocalStorage<T = any>( Key : string, InitValue : T ): IUseLoc
 	}, [] )
 
 	const SetStorage = ( Value : T ) => {
-		window.localStorage.setItem( Key, JSON.stringify( Value ) );
-		setStorage( Value );
+		if( typeof Value === "object" ) {
+			window.localStorage.setItem( Key, JSON.stringify( Value ) );
+			setStorage( Value );
+			return;
+		}
+
+		if( typeof Value === "string" && typeof Value === "number" ) {
+			window.localStorage.setItem( Key, ( Value as string | number ).toString() );
+			setStorage( Value );
+		}
 	}
 
 	const ResetStorage = () => {
 		window.localStorage.removeItem( Key );
-		setStorage( "" );
+		setStorage( DoInitStorage() );
 	}
 
 	return {
