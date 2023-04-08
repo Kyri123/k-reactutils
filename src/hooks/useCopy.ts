@@ -3,7 +3,7 @@ import {
 	useState
 } from "react";
 
-export function useCopy<T extends any = any>( InitRef? : T, AutoReset : number | undefined = 2500 ) : [
+export function useCopy<T = any>( InitRef? : T, AutoReset : number | undefined = 2500 ) : [
 	( CopyString : string, Ref? : T ) => void,
 	( Ref? : T ) => boolean,
 		T | undefined,
@@ -32,7 +32,8 @@ export function useCopy<T extends any = any>( InitRef? : T, AutoReset : number |
 				clearTimeout( Timeout );
 			}
 		};
-	}, [ Copy ] );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ Copy, AutoReset ] );
 
 	const IsCopied = ( Ref? : T ) => {
 		if ( Ref ) {

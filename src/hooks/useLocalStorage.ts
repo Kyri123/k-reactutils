@@ -52,7 +52,7 @@ export function useLocalStorage<T = any>( Key : string, InitValue : T ) : IUseLo
 					setStorage( () => JSON.parse( e.newValue! ) );
 					return;
 				}
-				setStorage( e.newValue );
+				setStorage( () => e.newValue );
 			}
 		};
 
@@ -61,6 +61,7 @@ export function useLocalStorage<T = any>( Key : string, InitValue : T ) : IUseLo
 		return () => {
 			window.removeEventListener( "storage", Event );
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	const SetStorage = ( Value : T ) => {

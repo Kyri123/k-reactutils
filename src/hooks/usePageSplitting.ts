@@ -3,12 +3,13 @@ import {
 	useState
 } from "react";
 
-export function usePageSplitting<T extends any>( Array : T[], NumPerPage : number = 50 ) {
+export function usePageSplitting<T = any>( Array : T[], NumPerPage : number = 50 ) {
 	const [ SelectPage, setSelectedPage ] = useState( 0 );
 	const [ CurrentPageArray, setCurrentPageArray ] = useState( () => [ ...Array ].splice( 0, NumPerPage ) );
 
 	useEffect( () => {
 		setCurrentPageArray( () => [ ...Array ].splice( SelectPage * NumPerPage, NumPerPage ) );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [ Array ] );
 
 	const GetMaxPage = () => {

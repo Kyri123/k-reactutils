@@ -4,9 +4,9 @@ import {
 	useState
 } from "react";
 
-export function useFetchText( Url : string, Options? : RequestInit ) {
+export function useFetchText( Url : string, Options? : RequestInit, InitValue? : string ) {
 	const [ IsLoading, setIsLoading ] = useState( () => true );
-	const [ Result, setResult ] = useState<string>( () => "" );
+	const [ Result, setResult ] = useState<string | undefined>( () => InitValue );
 	const [ Success, setSuccess ] = useState( () => false );
 
 	const DoFetch = useCallback( async( NewUrl? : string, NewOptions? : RequestInit ) => {
@@ -24,6 +24,7 @@ export function useFetchText( Url : string, Options? : RequestInit ) {
 
 	useEffect( () => {
 		DoFetch().then().catch( console.error );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	return {

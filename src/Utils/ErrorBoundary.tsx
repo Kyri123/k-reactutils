@@ -8,7 +8,7 @@ export class ErrorBoundary extends React.Component<{
 	state = { HasError: false };
 
 	// @ts-ignore
-	static getDerivedStateFromError( error ) {
+	static getDerivedStateFromError() {
 		return { HasError: true };
 	}
 

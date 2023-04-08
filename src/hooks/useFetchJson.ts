@@ -4,9 +4,9 @@ import {
 	useState
 } from "react";
 
-export function useFetchJson<T extends {}>( Url : string, Options? : RequestInit ) {
+export function useFetchJson<T = any>( Url : string, Options? : RequestInit, InitValue? : T ) {
 	const [ IsLoading, setIsLoading ] = useState( true );
-	const [ Result, setResult ] = useState<T>( () => ( {} as T ) );
+	const [ Result, setResult ] = useState<T | undefined>( () => InitValue );
 	const [ Success, setSuccess ] = useState( false );
 
 	const DoFetch = useCallback( async( NewUrl? : string, NewOptions? : RequestInit ) => {
@@ -24,6 +24,7 @@ export function useFetchJson<T extends {}>( Url : string, Options? : RequestInit
 
 	useEffect( () => {
 		DoFetch().then().catch( console.error );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
 	return {
