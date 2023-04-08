@@ -16,6 +16,11 @@ export interface IUseLocalStorage<T> {
 export function useLocalStorage<T = any>( Key : string, InitValue : T ): IUseLocalStorage<T> {
 	const InitRef = useRef<T>( InitValue );
 
+	// update if InitValue was updated
+	useEffect( () => {
+		InitRef.current = InitValue;
+	}, [ InitValue ] )
+
 	const DoInitStorage = ( ) => {
 		const LocalStorageValue = window.localStorage.getItem( Key );
 
@@ -59,16 +64,9 @@ export function useLocalStorage<T = any>( Key : string, InitValue : T ): IUseLoc
 	}, [] )
 
 	const SetStorage = ( Value : T ) => {
-		if( typeof Value === "object" ) {
-			window.localStorage.setItem( Key, JSON.stringify( Value ) );
-			setStorage( Value );
-			return;
-		}
-
-		if( typeof Value === "string" && typeof Value === "number" ) {
-			window.localStorage.setItem( Key, ( Value as string | number ).toString() );
-			setStorage( Value );
-		}
+		window.localStorage.setItem( Key, JSON.stringify( Value ) );
+		setStorage( Value );
+		return;
 	}
 
 	const ResetStorage = () => {
