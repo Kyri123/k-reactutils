@@ -1,9 +1,9 @@
 import React, { PropsWithChildren } from "react";
 
 export class ErrorBoundary extends React.Component<{
-	Fallback?: JSX.Element | React.ReactNode
+	Fallback? : JSX.Element | React.ReactNode
 } & PropsWithChildren, {
-	HasError: boolean
+	HasError : boolean
 }> {
 	state = { HasError: false };
 
@@ -17,7 +17,7 @@ export class ErrorBoundary extends React.Component<{
 	}
 
 	public render() : React.ReactNode {
-		if( this.state.HasError ) {
+		if ( this.state.HasError ) {
 			return this.props.Fallback;
 		}
 		return this.props.children;
