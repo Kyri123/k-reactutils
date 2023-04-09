@@ -1,9 +1,18 @@
 import {
 	useEffect,
 	useState
-} from "react";
+}           from "react";
+import copy from "copy-to-clipboard";
 
-export function useCopy<T = any>( InitRef? : T, AutoReset : number | undefined = 2500 ) : [
+export interface CopyOptions {
+	debug? : boolean;
+	message? : string;
+	format? : string; // MIME type
+	onCopy? : ( clipboardData : object ) => void;
+}
+
+
+export function useCopy<T = any>( InitRef? : T, AutoReset : number | undefined = 2500, CopyOpt? : CopyOptions ) : [
 	( CopyString : string, Ref? : T ) => void,
 	( Ref? : T ) => boolean,
 		T | undefined,
@@ -17,6 +26,7 @@ export function useCopy<T = any>( InitRef? : T, AutoReset : number | undefined =
 	};
 
 	const DoCopy = ( CopyString : string, Ref? : T ) => {
+		copy( CopyString, CopyOpt );
 		setCopy( CopyString );
 		setRef( Ref );
 	};
