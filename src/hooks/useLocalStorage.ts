@@ -31,14 +31,15 @@ export function useLocalStorage<T = any>( Key : string, InitValue : T ) : IUseLo
 					...JSON.parse( LocalStorageValue )
 				};
 
-				window.localStorage.setItem( Key, JSON.stringify( Storage ) );
+				window.localStorage.setItem( Key, typeof InitValue === "object" ? JSON.stringify( Storage ) : ( Storage as string | number ).toString() );
 				return Storage;
 			}
 
 			return LocalStorageValue;
 		}
 
-		window.localStorage.setItem( Key, JSON.stringify( InitRef.current ) );
+
+		window.localStorage.setItem( Key, typeof InitValue === "object" ? JSON.stringify( InitRef.current ) : ( InitRef.current as string | number ).toString() );
 		return InitRef.current;
 	};
 
@@ -65,7 +66,7 @@ export function useLocalStorage<T = any>( Key : string, InitValue : T ) : IUseLo
 	}, [] );
 
 	const SetStorage = ( Value : T ) => {
-		window.localStorage.setItem( Key, JSON.stringify( Value ) );
+		window.localStorage.setItem( Key, typeof InitValue === "object" ? JSON.stringify( Value ) : ( Value as string | number ).toString() );
 		setStorage( Value );
 		return;
 	};
