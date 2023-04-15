@@ -4,7 +4,6 @@ import jwt_decode, { JwtPayload } from "jwt-decode";
 
 export function useJWT<T = any & JwtPayload>( StorageKey : string ) {
 	const { Storage, SetStorage, ResetStorage } = useLocalStorage( StorageKey, "" );
-	console.log( Storage );
 
 	const Session = useMemo( () : ( T & JwtPayload | undefined ) => {
 		try {
