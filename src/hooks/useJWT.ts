@@ -6,24 +6,23 @@ import {
 import jwt_decode, { JwtPayload } from "jwt-decode";
 
 export function useJWT<T = any & JwtPayload>( StorageKey : string ) {
-	const { Storage, SetStorage, ResetStorage } = useLocalStorage<string>( StorageKey, "" );
-	const [ Session, setSession ] = useState<T & JwtPayload | undefined>( undefined );
+	const { Storage, SetStorage, ResetStorage } = useLocalStorage( StorageKey, "" );
 
-	useEffect( () => {
+	const DecodedToken = () : ( T & JwtPayload | undefined ) => {
 		try {
-			const Decode : T & JwtPayload = jwt_decode( Storage.split( Storage )[ 1 ] );
-			setSession( () => Decode );
-			return;
+			return jwt_decode( Storage.split( Storage )[ 1 ] );
 		}
 		catch ( e ) {
 			console.warn( e );
 		}
-		setSession( undefined );
-	}, [ Storage ] );
-
-	const SessionActive = () => {
-		return SecondsLeft() > 0;
+		return undefined;
 	};
+
+	const [ Session, setSession ] = useState( DecodedToken );
+
+	useEffect( () => {
+		setSession( DecodedToken );
+	}, [ Storage ] );
 
 	const GetRaw = () : T | undefined => {
 		if ( !Session ) {
@@ -45,6 +44,10 @@ export function useJWT<T = any & JwtPayload>( StorageKey : string ) {
 
 	const SecondsLeft = () => {
 		return Math.max( ( Session?.exp || 0 ) - Math.trunc( Date.now() / 1000 ), 0 );
+	};
+
+	const SessionActive = () => {
+		return SecondsLeft() > 0;
 	};
 
 	return {
