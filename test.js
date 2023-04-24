@@ -3,7 +3,7 @@ const Methods = [ "checkout", "copy", "delete", "get", "head", "lock", "merge", 
 let out = "";
 for ( let method of Methods ) {
 	method = method.charAt( 0 ).toUpperCase() + method.slice( 1 );
-	out += `fetch${ method }, `;
+	out += ` fetch${ method }Text, fetch${ method }Json,`;
 }
 
 console.log( out );
