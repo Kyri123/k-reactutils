@@ -1,47 +1,56 @@
 {
-  "name": "@kyri123/k-reactutils",
-  "version": "0.2.9",
-  "private": false,
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Kyri123/k-reactutils.git"
-  },
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "typings": "lib/index.d.ts",
-  "module": "esm/index.js",
-  "files": [
-    "lib/",
-    "esm/"
-  ],
-  "dependencies": {
-    "copy-to-clipboard": "^3.3.3",
-    "jwt-decode": "^3.1.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "yarn build:lint && yarn build:cjs && yarn build:es",
-    "build:lint": "eslint src --fix",
-    "build:cjs": "tsc",
-    "build:es": "tsc -m esNext --outDir esm"
-  },
-  "devDependencies": {
-    "eslint": "^8.37.0",
-    "eslint-config-react": "^1.1.7",
-    "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-react": "^7.32.2",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.23",
-    "@types/react": "^18.0.31",
-    "@types/react-dom": "^18.0.11",
-    "ts-node": "^10.9.1",
-    "tslib": "^2.5.0",
-    "typescript": "^4.9.5"
-  }
+	"name": "@kyri123/k-reactutils",
+	"version": "0.2.9",
+	"private": false,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Kyri123/k-reactutils.git"
+	},
+	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
+	"typings": "lib/index.d.ts",
+	"module": "esm/index.js",
+	"files": [
+		"lib/",
+		"esm/"
+	],
+	"dependencies": {
+		"copy-to-clipboard": "^3.3.3",
+		"jwt-decode": "^3.1.2",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	},
+	"scripts": {
+		"dev": "react-scripts start",
+		"buildrollup": "yarn buildrollup:clean && yarn buildrollup:lint && yarn buildrollup:rollup",
+		"buildrollup:clean": "node clean.js",
+		"buildrollup:lint": "eslint src --fix",
+		"buildrollup:rollup": "rollup --bundleConfigAsCjs -c",
+		"build": "yarn build:lint && yarn build:cjs && yarn build:es",
+		"build:lint": "eslint src --fix",
+		"build:cjs": "tsc",
+		"build:es": "tsc -m esNext --outDir esm"
+	},
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "^24.1.0",
+		"@rollup/plugin-node-resolve": "^15.0.2",
+		"@rollup/plugin-typescript": "^11.1.0",
+		"rollup": "^3.20.5",
+		"rollup-plugin-postcss": "^4.0.2",
+		"eslint": "^8.37.0",
+		"eslint-config-react": "^1.1.7",
+		"eslint-config-react-app": "^7.0.1",
+		"eslint-plugin-react": "^7.32.2",
+		"@testing-library/jest-dom": "^5.16.5",
+		"@testing-library/react": "^13.4.0",
+		"@testing-library/user-event": "^13.5.0",
+		"@types/jest": "^27.5.2",
+		"@types/node": "^16.18.23",
+		"@types/react": "^18.0.31",
+		"@types/react-dom": "^18.0.11",
+		"ts-node": "^10.9.1",
+		"tslib": "^2.5.0",
+		"typescript": "^4.9.5"
+	}
 }

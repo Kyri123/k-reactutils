@@ -3,7 +3,7 @@ import {
 	useState
 } from "react";
 
-export function usePageSplitting<T = any>( Array : T[], NumPerPage : number = 50 ) {
+export function usePageSplitting<T = any>( Array : T[], NumPerPage  = 50 ) {
 	const [ SelectPage, setSelectedPage ] = useState( 0 );
 	const [ CurrentPageArray, setCurrentPageArray ] = useState( () => [ ...Array ].splice( 0, NumPerPage ) );
 
@@ -16,7 +16,7 @@ export function usePageSplitting<T = any>( Array : T[], NumPerPage : number = 50
 		return Math.ceil( Array.length / NumPerPage );
 	};
 
-	const SetPage = ( Page : number = 0 ) => {
+	const SetPage = ( Page  = 0 ) => {
 		const RealPage = Math.min( Math.max( Page, 0 ), GetMaxPage() );
 		if ( RealPage !== SelectPage ) {
 			setSelectedPage( RealPage );

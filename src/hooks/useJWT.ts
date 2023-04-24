@@ -20,7 +20,7 @@ export function useJWT<T = any & JwtPayload>( StorageKey : string ) {
 			return Session;
 		}
 
-		let RawSession = { ...Session };
+		const RawSession = { ...Session };
 
 		delete RawSession.exp;
 		delete RawSession.aud;

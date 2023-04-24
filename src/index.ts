@@ -13,3 +13,32 @@ export { useTimeout }       from "./hooks/useTimeout";
 
 // Utils
 export { ErrorBoundary } from "./Utils/ErrorBoundary";
+export {
+	fetchCheckout,
+	fetchCopy,
+	fetchDelete,
+	fetchGet,
+	fetchHead,
+	fetchLock,
+	fetchMerge,
+	fetchMkactivity,
+	fetchMkcol,
+	fetchMove,
+	fetchMSearch,
+	fetchNotify,
+	fetchOptions,
+	fetchPatch,
+	fetchPost,
+	fetchPurge,
+	fetchPut,
+	fetchReport,
+	fetchSearch,
+	fetchSubscribe,
+	fetchTrace,
+	fetchUnlock,
+	fetchUnsubscribe,
+	IQueryOptions,
+	TQueryMethods,
+	TQueryContentType,
+	FetchApi
+}                        from "./Utils/apiQuery";

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useToggle } from "./useToggle";
 
-export function useInterval( Function : () => void, Seconds : number = 1000 ) {
+export function useInterval( Function : () => void, Seconds  = 1000 ) {
 	const [ Active, Toggle ] = useToggle( true );
 
 	useEffect( () => {
