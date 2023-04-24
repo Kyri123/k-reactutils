@@ -86,5 +86,13 @@ export {
 	IQueryOptions,
 	TQueryMethods,
 	TQueryContentType,
-	FetchApi
+	FetchApi,
+	IFetchFunction,
+	IFetchJsonFunction,
+	IFetchMainFunction,
+	IFetchJsonMainFunction,
+	IFetchTextMainFunction,
+	IFetchTextFunction,
+	FetchTextApi,
+	FetchJsonApi
 }                        from "./Utils/apiQuery";

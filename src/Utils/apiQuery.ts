@@ -3,18 +3,43 @@ import _ from "lodash";
 type TQueryMethods = "POST" | "GET" | "PUT" | "DELETE" | string
 type TQueryContentType = "application/json" | string
 
-interface IQueryOptions {
+interface IFetchFunction {
+	<D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) : Promise<Response | undefined>;
+}
+
+interface IFetchMainFunction {
+	<D extends object>( opt : IQueryOptions<D> ) : Promise<Response | undefined>;
+}
+
+interface IFetchJsonMainFunction {
+	<D extends object, T extends object>( opt : IQueryOptions<D> ) : Promise<T | undefined>;
+}
+
+interface IFetchTextMainFunction {
+	<D extends object>( opt : IQueryOptions<D> ) : Promise<string | undefined>;
+}
+
+interface IFetchJsonFunction {
+	<D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) : Promise<T | undefined>;
+}
+
+interface IFetchTextFunction {
+	<D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) : Promise<string | undefined>;
+}
+
+
+interface IQueryOptions<T extends object> {
 	method? : TQueryMethods;
 	auth? : string;
 	path : string;
-	data? : object;
+	data? : T;
 	contentType? : TQueryContentType;
 	initOptions? : RequestInit;
 	debug? : boolean;
 	raw? : boolean;
 }
 
-const FetchApi = async( option : IQueryOptions ) : Promise<Response | undefined> => {
+const FetchApi : IFetchMainFunction = async <T extends object>( option : IQueryOptions<T> ) : Promise<Response | undefined> => {
 	const method = option.method?.toUpperCase() || "GET";
 	const init : RequestInit = _.merge( {
 		method,
@@ -53,297 +78,298 @@ const FetchApi = async( option : IQueryOptions ) : Promise<Response | undefined>
 	return undefined;
 };
 
-async function FetchJsonApi<T>( option : IQueryOptions ) : Promise<T | undefined> {
+const FetchJsonApi : IFetchJsonMainFunction = async <D extends object, T = unknown>( option : IQueryOptions<D> ) : Promise<T | undefined> => {
 	const Response = await FetchApi( option );
 	if ( Response ) {
 		return await Response.json();
 	}
 	return undefined;
-}
+};
 
-async function FetchTextApi( option : IQueryOptions ) : Promise<string | undefined> {
+const FetchTextApi : IFetchTextMainFunction = async <D extends object>( option : IQueryOptions<D> ) : Promise<string | undefined> => {
 	const Response = await FetchApi( option );
 	if ( Response ) {
 		return await Response.text();
 	}
 	return undefined;
-}
+};
 
-const fetchCheckout = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchCheckout : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Checkout" } );
 };
 
-const fetchCopy = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchCopy : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Copy" } );
 };
 
-const fetchDelete = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchDelete : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Delete" } );
 };
 
-const fetchGet = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchGet : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Get" } );
 };
 
-const fetchHead = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchHead : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Head" } );
 };
 
-const fetchLock = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchLock : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Lock" } );
 };
 
-const fetchMerge = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMerge : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Merge" } );
 };
 
-const fetchMkactivity = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMkactivity : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Mkactivity" } );
 };
 
-const fetchMkcol = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMkcol : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Mkcol" } );
 };
 
-const fetchMove = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMove : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Move" } );
 };
 
-const fetchMSearch = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMSearch : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "M-search" } );
 };
 
-const fetchNotify = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchNotify : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Notify" } );
 };
 
-const fetchOptions = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchOptions : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Options" } );
 };
 
-const fetchPatch = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchPatch : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Patch" } );
 };
 
-const fetchPost = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchPost : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Post" } );
 };
 
-const fetchPurge = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchPurge : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Purge" } );
 };
 
-const fetchPut = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchPut : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Put" } );
 };
 
-const fetchReport = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchReport : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Report" } );
 };
 
-const fetchSearch = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchSearch : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Search" } );
 };
 
-const fetchSubscribe = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchSubscribe : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Subscribe" } );
 };
 
-const fetchTrace = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchTrace : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Trace" } );
 };
 
-const fetchUnlock = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchUnlock : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Unlock" } );
 };
 
-const fetchUnsubscribe = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchUnsubscribe : IFetchFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return await FetchApi( { ...opt, method: "Unsubscribe" } );
 };
 
-const fetchCheckoutText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchCheckoutText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Checkout" } );
 };
 
-async function fetchCheckoutJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Checkout" } );
-}
+const fetchCheckoutJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Checkout" } );
+};
 
-const fetchCopyText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchCopyText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Copy" } );
 };
 
-async function fetchCopyJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Copy" } );
-}
+const fetchCopyJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Copy" } );
+};
 
-const fetchDeleteText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchDeleteText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Delete" } );
 };
 
-async function fetchDeleteJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Delete" } );
-}
+const fetchDeleteJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Delete" } );
+};
 
-const fetchGetText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchGetText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Get" } );
 };
 
-async function fetchGetJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Get" } );
-}
+const fetchGetJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Get" } );
+};
 
-const fetchHeadText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchHeadText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Head" } );
 };
 
-async function fetchHeadJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Head" } );
-}
+const fetchHeadJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Head" } );
+};
 
-const fetchLockText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchLockText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Lock" } );
 };
 
-async function fetchLockJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Lock" } );
-}
+const fetchLockJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Lock" } );
+};
 
-const fetchMergeText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMergeText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Merge" } );
 };
 
-async function fetchMergeJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Merge" } );
-}
+const fetchMergeJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Merge" } );
+};
 
-const fetchMkactivityText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMkactivityText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Mkactivity" } );
 };
 
-async function fetchMkactivityJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Mkactivity" } );
-}
+const fetchMkactivityJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Mkactivity" } );
+};
 
-const fetchMkcolText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMkcolText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Mkcol" } );
 };
 
-async function fetchMkcolJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Mkcol" } );
-}
+const fetchMkcolJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Mkcol" } );
+};
 
-const fetchMoveText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMoveText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Move" } );
 };
 
-async function fetchMoveJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Move" } );
-}
+const fetchMoveJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Move" } );
+};
 
-const fetchMSearchText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchMSearchText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "M-search" } );
 };
 
-async function fetchMSearchJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "M-search" } );
-}
+const fetchMSearchJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "M-search" } );
+};
 
-const fetchNotifyText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchNotifyText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Notify" } );
 };
 
-async function fetchNotifyJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Notify" } );
-}
+const fetchNotifyJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Notify" } );
+};
 
-const fetchOptionsText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchOptionsText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Options" } );
 };
 
-async function fetchOptionsJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Options" } );
-}
+const fetchOptionsJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Options" } );
+};
 
-const fetchPatchText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchPatchText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Patch" } );
 };
 
-async function fetchPatchJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Patch" } );
-}
+const fetchPatchJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Patch" } );
+};
 
-const fetchPostText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchPostText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Post" } );
 };
 
-async function fetchPostJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Post" } );
-}
+const fetchPostJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Post" } );
+};
 
-const fetchPurgeText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchPurgeText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Purge" } );
 };
 
-async function fetchPurgeJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Purge" } );
-}
+const fetchPurgeJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Purge" } );
+};
 
-const fetchPutText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchPutText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Put" } );
 };
 
-async function fetchPutJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Put" } );
-}
+const fetchPutJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Put" } );
+};
 
-const fetchReportText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchReportText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Report" } );
 };
 
-async function fetchReportJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Report" } );
-}
+const fetchReportJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Report" } );
+};
 
-const fetchSearchText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchSearchText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Search" } );
 };
 
-async function fetchSearchJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Search" } );
-}
+const fetchSearchJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Search" } );
+};
 
-const fetchSubscribeText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchSubscribeText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Subscribe" } );
 };
 
-async function fetchSubscribeJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Subscribe" } );
-}
+const fetchSubscribeJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Subscribe" } );
+};
 
-const fetchTraceText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchTraceText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Trace" } );
 };
 
-async function fetchTraceJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Trace" } );
-}
+const fetchTraceJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Trace" } );
+};
 
-const fetchUnlockText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchUnlockText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Unlock" } );
 };
 
-async function fetchUnlockJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Unlock" } );
-}
+const fetchUnlockJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Unlock" } );
+};
 
-const fetchUnsubscribeText = async( opt : Omit<IQueryOptions, "method"> ) => {
+const fetchUnsubscribeText : IFetchTextFunction = async <D extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
 	return FetchTextApi( { ...opt, method: "Unsubscribe" } );
 };
 
-async function fetchUnsubscribeJson<T>( opt : Omit<IQueryOptions, "method"> ) {
-	return FetchJsonApi<T>( { ...opt, method: "Unsubscribe" } );
-}
+const fetchUnsubscribeJson : IFetchJsonFunction = async <D extends object, T extends object>( opt : Omit<IQueryOptions<D>, "method"> ) => {
+	return FetchJsonApi<D, T>( { ...opt, method: "Unsubscribe" } );
+};
+
 
 export {
 	fetchCheckoutText,
@@ -418,5 +444,13 @@ export {
 	IQueryOptions,
 	TQueryMethods,
 	TQueryContentType,
-	FetchApi
+	FetchApi,
+	IFetchFunction,
+	IFetchJsonFunction,
+	IFetchMainFunction,
+	IFetchJsonMainFunction,
+	IFetchTextMainFunction,
+	IFetchTextFunction,
+	FetchTextApi,
+	FetchJsonApi
 };
