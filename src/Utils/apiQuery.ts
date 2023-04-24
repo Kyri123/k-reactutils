@@ -7,7 +7,7 @@ interface IQueryOptions {
 	method? : TQueryMethods;
 	auth? : string;
 	path : string;
-	data : object;
+	data? : object;
 	contentType? : TQueryContentType;
 	initOptions? : RequestInit;
 }
@@ -24,13 +24,15 @@ const FetchApi = async( option : IQueryOptions ) : Promise<Response | undefined>
 		init.headers![ "Authorization" ] = `Bearer ${ option.auth }`;
 	}
 
-	if ( option.method === "GET" && Object.keys( option.data ).length > 0 ) {
-		option.path = option.path + "?" + Object.keys( option.data ).map( ( key ) => {
-			return encodeURIComponent( key ) + "=" + encodeURIComponent( option.data[ key ] );
-		} ).join( "&" );
-	}
-	else if ( option.method !== "GET" ) {
-		init.body = JSON.stringify( option.data );
+	if ( option.data ) {
+		if ( option.method === "GET" && Object.keys( option.data ).length > 0 ) {
+			option.path = option.path + "?" + Object.keys( option.data ).map( ( key ) => {
+				return encodeURIComponent( key ) + "=" + encodeURIComponent( option.data![ key ] );
+			} ).join( "&" );
+		}
+		else if ( option.method !== "GET" ) {
+			init.body = JSON.stringify( option.data );
+		}
 	}
 
 	const Response = await fetch( option.path, init );
