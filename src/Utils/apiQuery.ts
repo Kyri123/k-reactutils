@@ -10,11 +10,14 @@ interface IQueryOptions {
 	data? : object;
 	contentType? : TQueryContentType;
 	initOptions? : RequestInit;
+	debug? : boolean;
+	raw? : boolean;
 }
 
 const FetchApi = async( option : IQueryOptions ) : Promise<Response | undefined> => {
+	const method = option.method?.toUpperCase() || "GET";
 	const init : RequestInit = _.merge( {
-		method: option.method?.toUpperCase() || "GET",
+		method,
 		headers: {
 			"Content-Type": option.contentType || "application/json"
 		}
@@ -25,17 +28,25 @@ const FetchApi = async( option : IQueryOptions ) : Promise<Response | undefined>
 	}
 
 	if ( option.data ) {
-		if ( option.method === "GET" && Object.keys( option.data ).length > 0 ) {
+		if ( method === "GET" && Object.keys( option.data ).length > 0 ) {
 			option.path = option.path + "?" + Object.keys( option.data ).map( ( key ) => {
 				return encodeURIComponent( key ) + "=" + encodeURIComponent( option.data![ key ] );
 			} ).join( "&" );
 		}
-		else if ( option.method !== "GET" ) {
+		else if ( Object.keys( option.data ).length > 0 ) {
 			init.body = JSON.stringify( option.data );
 		}
 	}
 
 	const Response = await fetch( option.path, init );
+	if ( option.debug ) {
+		console.log( Response );
+	}
+
+	if ( option.raw ) {
+		return Response || undefined;
+	}
+
 	if ( Response && Response.ok && Response.status === 200 ) {
 		return Response;
 	}
