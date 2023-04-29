@@ -32,7 +32,7 @@ interface IQueryOptions<T extends object> {
 	method? : TQueryMethods;
 	auth? : string;
 	path : string;
-	data? : T;
+	data? : T | FormData;
 	contentType? : TQueryContentType;
 	initOptions? : RequestInit;
 	debug? : boolean;
@@ -59,7 +59,7 @@ const FetchApi : IFetchMainFunction = async <T extends object>( option : IQueryO
 			} ).join( "&" );
 		}
 		else if ( Object.keys( option.data ).length > 0 ) {
-			init.body = JSON.stringify( option.data );
+			init.body = option.data instanceof FormData ? option.data : JSON.stringify( option.data );
 		}
 	}
 
